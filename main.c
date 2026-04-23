@@ -15,6 +15,18 @@ int main( int argc, char **argv)
     fd = open(argv[1], O_RDONLY);
     if(fd == -1)
         return (1);
-
-    void map = mmap(NULL, 
+    struct stat st;
+    if (fstat(fd, &st) < 0)
+    {
+        perror("Erreur fstat");
+        close(fd);
+        return (1);
+    }
+    void *map = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+    if (mapped_data == MAP_FAILED) 
+    {
+        perror("Erreur mmap");
+        close(fd);
+        return (1);
+    }
 }
